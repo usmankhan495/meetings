@@ -10,6 +10,7 @@ export const fetchEvent = async (eventId: number) => {
     return eventData;
     // setEventData(eventData.data);
   } catch (error) {
-    console.error('Error:', error.message);
+    // eslint-disable-next-line no-console
+    console.error('Error:', error);
   }
 };

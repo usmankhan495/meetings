@@ -21,7 +21,8 @@ export const updateEvent = async (payload: unknown) => {
     return data;
     // setResponseMessage(`Event created successfully: ${data.message}`);
   } catch (error) {
-    console.error('Error:', error.message);
+    // eslint-disable-next-line no-console
+    console.error('Error:', error);
     // setResponseMessage('Error creating event');
   }
 };

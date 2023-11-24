@@ -24,7 +24,8 @@ export const loginWithSocial = async (payload: unknown) => {
 
     return data;
   } catch (error) {
-    console.error('Error:', error.message);
+    // eslint-disable-next-line no-console
+    console.error('Error:', error);
     return { success: false, message: 'An error occurred while logging in' };
   }
 };
