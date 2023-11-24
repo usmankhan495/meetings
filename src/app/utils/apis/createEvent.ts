@@ -17,10 +17,12 @@ export const createEvent = async (payload: unknown) => {
       throw new Error('Network response was not ok');
     }
 
+    // eslint-disable-next-line unused-imports/no-unused-vars
     const data = await response.json();
     // setResponseMessage(`Event created successfully: ${data.message}`);
   } catch (error) {
-    console.error('Error:', error.message);
+    // eslint-disable-next-line no-console
+    console.error('Error:', error);
     // setResponseMessage('Error creating event');
   }
 };
