@@ -22,6 +22,7 @@ import ArrowLink from '@/components/links/ArrowLink';
 export default function HomePage() {
   const { data: session, status } = useSession();
 
+  // eslint-disable-next-line no-console
   console.log('session::::..............', session, status);
   return (
     <main>
