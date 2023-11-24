@@ -8,7 +8,7 @@ import * as React from 'react';
 import { fetchEvent } from '@/app/utils/apis/fetchEvent';
 
 export default function EventPage({
-  params: { id }
+  params: { id },
 }: {
   params: { id: string };
 }) {
@@ -25,16 +25,15 @@ export default function EventPage({
     // if the user is not authorized, redirect to the login page
     // with a return url to the current page
     if (unAuthorized) {
-      console.log('not authorized');
       router.push('/');
     }
   }, [loading, unAuthorized, status, router]);
 
   React.useEffect(() => {
-    console.log('......status.....', status);
     if (status === 'authenticated' && data.user) {
       fetchEventData();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const fetchEventData = async () => {

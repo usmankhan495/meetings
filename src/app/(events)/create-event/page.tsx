@@ -1,5 +1,4 @@
 'use client';
-import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import TimePicker from 'react-time-picker';
@@ -18,8 +17,9 @@ export default function CreateEvent() {
   const [deadlineDate, setDeadlineDate] = useState(new Date());
   const [description, setDescription] = useState('');
 
-  const { data, status } = useSession();
+  // const { data, status } = useSession();
 
+  // eslint-disable-next-line no-console
   console.log('create event:::', meetDate);
 
   const handleDurationClick = (value: number) => {
@@ -53,7 +53,7 @@ export default function CreateEvent() {
       event_schedule_deadline: deadlineDate.toISOString(),
       description,
       is_draft: false,
-      event_duration: duration
+      event_duration: duration,
     };
     createEvent(payload);
   };
@@ -116,7 +116,9 @@ export default function CreateEvent() {
         <div className='flex'>
           <DatePicker
             selected={meetDate}
-            onChange={(date) => setMeetDate(date)}
+            onChange={(date) => {
+              if (date) setMeetDate(date);
+            }}
           />
         </div>
       </div>
@@ -160,7 +162,9 @@ export default function CreateEvent() {
         <div className='flex'>
           <DatePicker
             selected={deadlineDate}
-            onChange={(date) => setDeadlineDate(date)}
+            onChange={(date) => {
+              if (date) setDeadlineDate(date);
+            }}
           />
         </div>
       </div>
@@ -171,7 +175,7 @@ export default function CreateEvent() {
           Description
         </label>
         <textarea
-          rows='4'
+          rows={4}
           className='mt-1 w-full rounded-md border p-2'
           value={description}
           onChange={(e) => setDescription(e.target.value)}
