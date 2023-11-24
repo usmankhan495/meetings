@@ -8,7 +8,7 @@ import * as React from 'react';
 import { fetchEvent } from '@/app/utils/apis/fetchEvent';
 
 export default function EventPage({
-  params: { id },
+  params: { id }
 }: {
   params: { id: string };
 }) {
@@ -31,13 +31,14 @@ export default function EventPage({
 
   React.useEffect(() => {
     if (status === 'authenticated' && data.user) {
+      console.log('authenticated::::::');
       fetchEventData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
 
   const fetchEventData = async () => {
-    await fetchEvent(123);
+    await fetchEvent(id);
   };
 
   if (loading) {

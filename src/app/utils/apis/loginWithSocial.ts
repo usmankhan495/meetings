@@ -3,7 +3,7 @@ import { API_BASE_URL } from "@/app/utils/constant";
 
 export const loginWithSocial = async (payload: unknown) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/social/login`, {
+    const response = await fetch(`${API_BASE_URL}/social-login/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

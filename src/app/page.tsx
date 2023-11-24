@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
 
-// import { loginWithSocial } from '@/app/utils/apis/loginWithSocial';
+import { eventList } from '@/app/utils/apis/events';
+import { loginWithSocial } from '@/app/utils/apis/loginWithSocial';
 
 export default function HomePage() {
   const { data, status } = useSession();
@@ -14,15 +15,26 @@ export default function HomePage() {
 
   React.useEffect(() => {
     if (status === 'authenticated' && data.user) {
-      // const payload = {
-      //   platform: 'google',
-      //   access_token: data.access_token,
-      //   refresh_token: data.refresh
-      // };
-      // loginWithSocial(payload);
+      init(data);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status]);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const init = async (data: any) => {
+    const payload = {
+      platform: 'google',
+      access_token: data.access_token,
+      refresh_token: data.refresh
+    };
+    const response = await loginWithSocial(payload);
+
+    await eventList(response?.data?.token);
+  };
+
+  // const getEventList = async () => {
+  //   eventList();
+  // };
 
   if (status === 'loading') {
     return (

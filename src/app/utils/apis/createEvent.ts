@@ -2,13 +2,14 @@ import { API_BASE_URL } from "@/app/utils/constant";
 
 export const createEvent = async (payload: unknown) => {
   try {
-    // const authToken = getAuthToken();
+    const authToken = localStorage.getItem('token');
+    console.log('authToken', authToken)
 
-    const response = await fetch(`${API_BASE_URL}/api/event`, {
+    const response = await fetch(`${API_BASE_URL}/api/events/`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
-        // 'Authorization': `Bearer ${authToken}`, // Include the token in the Authorization header
+        'Content-Type': 'application/json',
+        'Authorization': `token ${authToken}`, // Include the token in the Authorization header
       },
       body: JSON.stringify(payload)
     });

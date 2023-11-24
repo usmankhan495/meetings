@@ -26,34 +26,20 @@ export default function CreateEvent() {
     setDuration(value);
   };
 
-  // const handleDoneClick = () => {
-  //   // Implement your logic here to handle the creation of the event
-
-  //   const year = meetDate.getFullYear();
-  //   const month = meetDate.getMonth() + 1; // Adding 1 to make it one-based
-  //   const day = meetDate.getDate();
-  //   console.log('Data... ', year, month, day);
-  //   console.log('Event Name:', eventName);
-  //   console.log('Duration:', duration);
-  //   console.log('Meet Date:', meetDate.toISOString());
-  //   console.log('Deadline Date:', deadlineDate);
-  //   console.log('Description:', description);
-  // };
-
   const handleDoneClick = async () => {
     const year = meetDate.getFullYear();
     const month = meetDate.getMonth() + 1;
     const day = meetDate.getDate();
 
     const payload = {
-      host: 1,
+      host: 3,
       event_schedule_date: year + '-' + month + '-' + day,
       specific_time_start: startTime,
       specific_time_end: endTime,
       event_schedule_deadline: deadlineDate.toISOString(),
       description,
       is_draft: false,
-      event_duration: duration,
+      event_duration: duration
     };
     createEvent(payload);
   };

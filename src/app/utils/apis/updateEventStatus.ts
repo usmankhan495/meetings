@@ -1,16 +1,17 @@
 import { API_BASE_URL } from "@/app/utils/constant";
 
-export const updateEvent = async (payload: unknown) => {
-  try {
-    // const authToken = getAuthToken();
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const updateEvent = async (payload: any) => {
 
-    const response = await fetch(`${API_BASE_URL}/api/event`, {
+  try {
+    const authToken = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE_URL}/api/event-attendees/${payload.attendees}/`, {
       method: 'PATCH',
       headers: {
-        'Content-Type': 'application/json'
-        // 'Authorization': `Bearer ${authToken}`, // Include the token in the Authorization header
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${authToken}`,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ status: payload.status })
     });
 
     if (!response.ok) {
