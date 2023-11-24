@@ -1,6 +1,7 @@
 import { API_BASE_URL } from "@/app/utils/constant";
 
-export const eventList = async (token) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const eventList = async (token: any) => {
   try {
     const response = await fetch(`${API_BASE_URL}/api/events`,
       {
