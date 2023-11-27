@@ -6,6 +6,7 @@ import '@/styles/globals.css';
 // !STARTERCONF This is for demo purposes, remove @/styles/colors.css import immediately
 import '@/styles/colors.css';
 
+import ToastProvider from '@/app/utils/toast.provider';
 import { siteConfig } from '@/constant/config';
 
 // import { SessionProvider } from 'next-auth/react';
@@ -61,8 +62,9 @@ export default function RootLayout({
     <html>
       <body>
         {' '}
-        <Providers>{children}</Providers>
-        {/* <UserProvider>{children}</UserProvider> */}
+        <ToastProvider>
+          <Providers>{children}</Providers>
+        </ToastProvider>
       </body>
     </html>
   );

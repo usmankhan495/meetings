@@ -20,10 +20,8 @@ export const updateEvent = async (payload: any) => {
 
     const data = await response.json();
     return data;
-    // setResponseMessage(`Event created successfully: ${data.message}`);
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error:', error);
-    // setResponseMessage('Error creating event');
   }
 };

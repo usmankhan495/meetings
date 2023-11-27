@@ -1,17 +1,13 @@
-// import { getAccessToken, getSession } from '@auth0/nextjs-auth0';
 'use client';
 import { useRouter } from 'next/navigation';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
 
-import { eventList } from '@/app/utils/apis/events';
 import { loginWithSocial } from '@/app/utils/apis/loginWithSocial';
 
 export default function HomePage() {
   const { data, status } = useSession();
   const route = useRouter();
-  // eslint-disable-next-line no-console
-  console.log('my session:::', data, status);
 
   React.useEffect(() => {
     if (status === 'authenticated' && data.user) {
@@ -27,14 +23,14 @@ export default function HomePage() {
       access_token: data.access_token,
       refresh_token: data.refresh
     };
-    const response = await loginWithSocial(payload);
-
-    await eventList(response?.data?.token);
+    try {
+      const response = await loginWithSocial(payload);
+      if (!response?.success) {
+        signOut();
+      }
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
   };
-
-  // const getEventList = async () => {
-  //   eventList();
-  // };
 
   if (status === 'loading') {
     return (
@@ -75,32 +71,18 @@ export default function HomePage() {
                 Create Event
               </button>
 
-              <button className='rounded bg-purple-500 px-4 py-2 text-white'>
+              <button
+                onClick={() => {
+                  route.push('/events');
+                }}
+                className='rounded bg-purple-500 px-4 py-2 text-white'
+              >
                 My Event
               </button>
             </>
           )}
         </div>
       </div>
-
-      {/* <section className='bg-white'>
-        <div className='layout relative flex min-h-screen flex-col items-center justify-center py-12 text-center'>
-          {status === 'unauthenticated' ? (
-            <button onClick={() => signIn('google', { callbackUrl: '/' })}>
-              Sign in
-            </button>
-          ) : (
-            <button onClick={() => signOut()}>Sign out</button>
-          )}
-          <button
-            onClick={() => {
-              route.push('/create-event');
-            }}
-          >
-            Create Event
-          </button>
-        </div>
-      </section> */}
     </main>
   );
 }

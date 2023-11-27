@@ -1,23 +1,26 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import TimePicker from 'react-time-picker';
+import { toast, ToastContainer } from 'react-toastify';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import 'react-time-picker/dist/TimePicker.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 import { createEvent } from '@/app/utils/apis/createEvent';
 
 export default function CreateEvent() {
-  const [eventName, setEventName] = useState('');
+  // const [eventName, setEventName] = useState('');
   const [duration, setDuration] = useState<number>(30);
   const [meetDate, setMeetDate] = useState(new Date());
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [deadLineEndTime, setDeadLineEndTime] = useState('');
   const [deadlineDate, setDeadlineDate] = useState(new Date());
   const [description, setDescription] = useState('');
-
-  // const { data, status } = useSession();
+  const route = useRouter();
 
   // eslint-disable-next-line no-console
   console.log('create event:::', meetDate);
@@ -30,9 +33,10 @@ export default function CreateEvent() {
     const year = meetDate.getFullYear();
     const month = meetDate.getMonth() + 1;
     const day = meetDate.getDate();
+    const userId = localStorage.getItem('userId');
 
     const payload = {
-      host: 3,
+      host: userId,
       event_schedule_date: year + '-' + month + '-' + day,
       specific_time_start: startTime,
       specific_time_end: endTime,
@@ -41,7 +45,13 @@ export default function CreateEvent() {
       is_draft: false,
       event_duration: duration
     };
-    createEvent(payload);
+    try {
+      await createEvent(payload);
+      route.replace('/');
+      toast('Event Created!');
+    } catch (e) {
+      toast('Something went wrong.please try again.');
+    }
   };
 
   return (
@@ -49,7 +59,7 @@ export default function CreateEvent() {
       <h1 className='mb-4 text-2xl font-bold'>Create Event</h1>
 
       {/* Event Name */}
-      <div className='mb-4'>
+      {/* <div className='mb-4'>
         <label className='block text-sm font-medium text-gray-700'>
           Event Name
         </label>
@@ -59,7 +69,7 @@ export default function CreateEvent() {
           value={eventName}
           onChange={(e) => setEventName(e.target.value)}
         />
-      </div>
+      </div> */}
 
       {/* Duration */}
       <div className='mb-4'>
@@ -143,13 +153,28 @@ export default function CreateEvent() {
       {/* Deadline Date */}
       <div className='mb-4'>
         <label className='block text-sm font-medium text-gray-700'>
-          Deadline
+          Deadline Date
         </label>
         <div className='flex'>
           <DatePicker
             selected={deadlineDate}
             onChange={(date) => {
               if (date) setDeadlineDate(date);
+            }}
+          />
+        </div>
+      </div>
+
+      <div className='mb-4'>
+        <label className='block text-sm font-medium text-gray-700'>
+          Deadline Time
+        </label>
+        <div className='flex'>
+          <TimePicker
+            value={deadLineEndTime}
+            disableClock
+            onChange={(time) => {
+              setDeadLineEndTime(time as string);
             }}
           />
         </div>
@@ -177,6 +202,7 @@ export default function CreateEvent() {
           Save
         </button>
       </div>
+      <ToastContainer />
     </div>
   );
 }

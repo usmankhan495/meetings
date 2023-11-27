@@ -20,6 +20,7 @@ export const loginWithSocial = async (payload: unknown) => {
     if (data.success) {
       // Save token in local storage
       localStorage.setItem('token', data.data.token);
+      localStorage.setItem('userId', data.data.id);
     }
 
     return data;

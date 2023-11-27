@@ -1,13 +1,15 @@
 import { API_BASE_URL } from "@/app/utils/constant";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const eventList = async (token: any) => {
+export const eventList = async () => {
   try {
+    const authToken = localStorage.getItem('token');
+
     const response = await fetch(`${API_BASE_URL}/api/events`,
       {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `token ${token}`,
+          'Authorization': `token ${authToken}`,
         },
         cache: 'no-cache'
       });
