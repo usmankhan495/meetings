@@ -12,7 +12,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { createEvent } from '@/app/utils/apis/createEvent';
 
 export default function CreateEvent() {
-  // const [eventName, setEventName] = useState('');
+  const [eventSummary, setEventSummary] = useState('');
   const [duration, setDuration] = useState<number>(30);
   const [meetDate, setMeetDate] = useState(new Date());
   const [startTime, setStartTime] = useState('');
@@ -22,9 +22,6 @@ export default function CreateEvent() {
   const [description, setDescription] = useState('');
   const route = useRouter();
 
-  // eslint-disable-next-line no-console
-  console.log('create event:::', meetDate);
-
   const handleDurationClick = (value: number) => {
     setDuration(value);
   };
@@ -33,22 +30,45 @@ export default function CreateEvent() {
     const year = meetDate.getFullYear();
     const month = meetDate.getMonth() + 1;
     const day = meetDate.getDate();
+    const deadlineYear = deadlineDate.getFullYear();
+    const deadlineMonth = deadlineDate.getMonth() + 1;
+    const deadlineDay = deadlineDate.getDate();
+
+    const deadline = deadlineYear + '-' + deadlineMonth + '-' + deadlineDay;
+    let deadlineDateTime = '';
+    if (deadLineEndTime) {
+      deadlineDateTime = new Date(
+        `${deadline}T${deadLineEndTime}Z`
+      ).toISOString();
+    }
+
     const userId = localStorage.getItem('userId');
+
+    if (startTime === '' || endTime === '' || deadLineEndTime === '') {
+      toast('Please provide values for all fields');
+      return;
+    }
 
     const payload = {
       host: userId,
       event_schedule_date: year + '-' + month + '-' + day,
       specific_time_start: startTime,
       specific_time_end: endTime,
-      event_schedule_deadline: deadlineDate.toISOString(),
+      event_schedule_deadline: deadlineDateTime,
       description,
       is_draft: false,
-      event_duration: duration
+      event_duration: duration,
+      summary: eventSummary
     };
+
     try {
-      await createEvent(payload);
-      route.replace('/');
-      toast('Event Created!');
+      const response = await createEvent(payload);
+      if (response && !response.success) {
+        toast('Something went wrong.please try again.');
+      } else {
+        route.replace('/');
+        toast('Event Created!');
+      }
     } catch (e) {
       toast('Something went wrong.please try again.');
     }
@@ -59,17 +79,17 @@ export default function CreateEvent() {
       <h1 className='mb-4 text-2xl font-bold'>Create Event</h1>
 
       {/* Event Name */}
-      {/* <div className='mb-4'>
+      <div className='mb-4'>
         <label className='block text-sm font-medium text-gray-700'>
-          Event Name
+          Summary
         </label>
         <input
           type='text'
           className='mt-1 w-full rounded-md border p-2'
-          value={eventName}
-          onChange={(e) => setEventName(e.target.value)}
+          value={eventSummary}
+          onChange={(e) => setEventSummary(e.target.value)}
         />
-      </div> */}
+      </div>
 
       {/* Duration */}
       <div className='mb-4'>

@@ -20,7 +20,6 @@ export const createEvent = async (payload: unknown) => {
     // eslint-disable-next-line unused-imports/no-unused-vars
     const data = await response.json();
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error:', error);
+    return { success: false, error: 'Something went wrong.' }
   }
 };

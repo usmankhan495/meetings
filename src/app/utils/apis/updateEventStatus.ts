@@ -9,7 +9,7 @@ export const updateEvent = async (payload: any) => {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`,
+        'Authorization': `token ${authToken}`,
       },
       body: JSON.stringify({ status: payload.status })
     });
@@ -18,10 +18,9 @@ export const updateEvent = async (payload: any) => {
       throw new Error('Network response was not ok');
     }
 
-    const data = await response.json();
-    return data;
+    await response.json();
+    // return data;
   } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error('Error:', error);
+    return { success: false }
   }
 };

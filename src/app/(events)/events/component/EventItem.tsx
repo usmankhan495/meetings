@@ -5,6 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { copyToClipboard } from '@/app/utils/clipboard';
+import { convertTo12HourFormat } from '@/app/utils/convertTo12HourFormat';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const EventItem = ({ event }: any) => {
@@ -16,10 +17,12 @@ const EventItem = ({ event }: any) => {
         <strong>Date:</strong> {event.event_schedule_date}
       </p>
       <p>
-        <strong>Start Time:</strong> {event.specific_time_start}
+        <strong>Start Time:</strong>{' '}
+        {convertTo12HourFormat(event.specific_time_start)}
       </p>
       <p>
-        <strong>End Time:</strong> {event.specific_time_end}
+        <strong>End Time:</strong>{' '}
+        {convertTo12HourFormat(event.specific_time_end)}
       </p>
       <p>
         <strong>Deadline:</strong> {deadline}

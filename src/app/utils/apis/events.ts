@@ -5,7 +5,7 @@ export const eventList = async () => {
   try {
     const authToken = localStorage.getItem('token');
 
-    const response = await fetch(`${API_BASE_URL}/api/events`,
+    const response = await fetch(`${API_BASE_URL}/api/events/`,
       {
         headers: {
           'Content-Type': 'application/json',

@@ -16,7 +16,7 @@ const EventsPage = () => {
   const getEvents = async () => {
     try {
       const events = await eventList();
-      setEvents(events);
+      setEvents(events || []);
     } catch (e) {
       setEvents([]);
     }

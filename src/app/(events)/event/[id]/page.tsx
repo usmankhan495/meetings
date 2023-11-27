@@ -16,6 +16,21 @@ export default function EventPage({
   params: { id: string };
 }) {
   const { data, status } = useSession();
+  const [event, setEvent] = React.useState<{
+    id: number;
+    attendee: {
+      id: number;
+    };
+    event: {
+      summary: string;
+      specific_time_start: string;
+      specific_time_end: string;
+      event_schedule_deadline: string;
+      description: string;
+      event_schedule_date: string;
+      id: number;
+    };
+  }>();
   // const authorized = status === 'authenticated';
   const router = useRouter();
   const unAuthorized = status === 'unauthenticated';
@@ -40,7 +55,8 @@ export default function EventPage({
   }, [status]);
 
   const fetchEventData = async () => {
-    await fetchEvent(id);
+    const event = await fetchEvent(id);
+    setEvent(event);
   };
 
   if (loading) {
@@ -54,11 +70,16 @@ export default function EventPage({
   const onPressAccept = async () => {
     try {
       const payload = {
-        attendees: 2,
+        attendees: event?.id,
         status: 2
       };
-      await updateEvent(payload);
-      toast('Event invite Accepted');
+      const response = await updateEvent(payload);
+      if (response && !response.success) {
+        toast('Something went wrong.');
+      } else {
+        toast('Event invite Accepted.');
+        router.replace('/');
+      }
     } catch (e) {
       toast('Something went wrong.');
     }
@@ -67,11 +88,16 @@ export default function EventPage({
   const onPressDecline = async () => {
     try {
       const payload = {
-        attendees: 2,
+        attendees: event?.id,
         status: 3
       };
-      await updateEvent(payload);
-      toast('Event invite Declined');
+      const response = await updateEvent(payload);
+      if (response && !response.success) {
+        toast('Something went wrong.');
+      } else {
+        toast('Event invite Declined.');
+        router.replace('/');
+      }
     } catch (e) {
       toast('Something went wrong.');
     }
@@ -81,14 +107,16 @@ export default function EventPage({
       <div className='max-w-md rounded-md bg-white p-6 shadow-md'>
         <h1 className='mb-4 text-2xl font-bold'>Event Details</h1>
 
-        {/* <div className='mb-4'>
+        <div className='mb-4'>
           <label className='block text-gray-600'>Event Name:</label>
-          <p className='text-gray-800'>Sample Event {id}</p>
-        </div> */}
+          <p className='text-gray-800'>{event?.event?.summary}</p>
+        </div>
 
         <div className='mb-4'>
           <label className='block text-gray-600'>Event Date:</label>
-          <p className='text-gray-800'>2023-11-26</p>
+          <p className='text-gray-800'>
+            {event?.event.event_schedule_deadline}
+          </p>
         </div>
 
         <div className='mb-4'>
@@ -103,7 +131,17 @@ export default function EventPage({
 
         <div className='mb-4'>
           <label className='block text-gray-600'>Event Deadline:</label>
-          <p className='text-gray-800'>2023-11-26 12:00 PM</p>
+          <p className='text-gray-800'>2023-11-26</p>
+        </div>
+
+        <div className='mb-4'>
+          <label className='block text-gray-600'>Event Deadline Time:</label>
+          <p className='text-gray-800'>10:00 AM</p>
+        </div>
+
+        <div className='mb-4'>
+          <label className='block text-gray-600'>Description</label>
+          <p className='text-gray-800'>{event?.event.description}</p>
         </div>
 
         <div className='flex space-x-4'>
