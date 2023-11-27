@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { fetchEvent } from '@/app/utils/apis/fetchEvent';
 import { updateEvent } from '@/app/utils/apis/updateEventStatus';
+import { convertTo12HourFormat } from '@/app/utils/convertTo12HourFormat';
 
 export default function EventPage({
   params: { id }
@@ -35,6 +36,33 @@ export default function EventPage({
   const router = useRouter();
   const unAuthorized = status === 'unauthenticated';
   const loading = status === 'loading';
+
+  const getDeadLineDate = () => {
+    if (event?.event?.event_schedule_deadline) {
+      const deadlineYear = new Date(
+        event?.event?.event_schedule_deadline
+      ).getFullYear();
+      const deadlineMonth =
+        new Date(event?.event?.event_schedule_deadline).getMonth() + 1;
+      const deadlineDay = new Date(
+        event?.event?.event_schedule_deadline
+      ).getDate();
+
+      return deadlineYear + '-' + deadlineMonth + '-' + deadlineDay;
+    } else return '';
+  };
+
+  const getDeadlineTime = () => {
+    if (event?.event?.event_schedule_deadline) {
+      const deadlineTime = new Date(
+        event?.event?.event_schedule_deadline
+      ).toLocaleTimeString();
+
+      return deadlineTime;
+    } else {
+      return '';
+    }
+  };
 
   React.useEffect(() => {
     // check if the session is loading or the router is not ready
@@ -114,29 +142,31 @@ export default function EventPage({
 
         <div className='mb-4'>
           <label className='block text-gray-600'>Event Date:</label>
-          <p className='text-gray-800'>
-            {event?.event.event_schedule_deadline}
-          </p>
+          <p className='text-gray-800'>{event?.event.event_schedule_date}</p>
         </div>
 
         <div className='mb-4'>
           <label className='block text-gray-600'>Start Time:</label>
-          <p className='text-gray-800'>08:00 AM</p>
+          <p className='text-gray-800'>
+            {convertTo12HourFormat(event?.event.specific_time_start || '')}
+          </p>
         </div>
 
         <div className='mb-4'>
           <label className='block text-gray-600'>End Time:</label>
-          <p className='text-gray-800'>10:00 AM</p>
+          <p className='text-gray-800'>
+            {convertTo12HourFormat(event?.event?.specific_time_end || '')}
+          </p>
         </div>
 
         <div className='mb-4'>
           <label className='block text-gray-600'>Event Deadline:</label>
-          <p className='text-gray-800'>2023-11-26</p>
+          <p className='text-gray-800'>{getDeadLineDate()}</p>
         </div>
 
         <div className='mb-4'>
-          <label className='block text-gray-600'>Event Deadline Time:</label>
-          <p className='text-gray-800'>10:00 AM</p>
+          <label className='block text-gray-600'>Event Deadline:</label>
+          <p className='text-gray-800'>{getDeadlineTime()}</p>
         </div>
 
         <div className='mb-4'>
